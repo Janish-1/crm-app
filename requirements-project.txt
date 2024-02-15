@@ -1,0 +1,4 @@
+Career->
+form CRUD-Name,Mail,Contact,Category/Position,Experiance,CV
+submit to crm and mail
+give link to test( form based ) - 75 minimum pass - do not send mail if below 75
