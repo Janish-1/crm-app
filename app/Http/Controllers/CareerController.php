@@ -23,7 +23,9 @@ class CareerController extends Controller
         // Check if any data is provided
         $requestData = $request->only(['name', 'mail', 'contact', 'category', 'experience']);
         if (empty(array_filter($requestData))) {
-            return response()->json(['message' => 'No data provided'], 400);
+            return response()->json([
+                'success' => false,
+                'message' => 'No data provided'], 400);
         }
     
         // Upload the CV file
@@ -42,10 +44,14 @@ class CareerController extends Controller
         // Save the Career model instance to the database
         if (!$career->save()) {
             // Handle the case where saving fails
-            return response()->json(['message' => 'Failed to create career'], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create career'], 500);
         }
     
-        return response()->json(['message' => 'Career created successfully', 'career' => $career], 201);
+        return response()->json([
+            'success' => true,
+            'message' => 'Career created successfully', 'career' => $career], 200);
     }
     
     public function readCareer($id)
@@ -53,9 +59,13 @@ class CareerController extends Controller
         $career = Career::find($id);
 
         if ($career) {
-            return response()->json(['career' => $career], 200);
+            return response()->json([
+                'success' => true,
+                'career' => $career], 200);
         } else {
-            return response()->json(['message' => 'Career not found'], 404);
+            return response()->json([
+                'success' => false,
+                'message' => 'Career not found'], 404);
         }
     }
 
@@ -76,7 +86,9 @@ class CareerController extends Controller
 
         if (!$career) {
             // Handle the case where the career is not found
-            return response()->json(['message' => 'Career not found'], 404);
+            return response()->json([
+                'success' => false,
+                'message' => 'Career not found'], 404);
         }
 
         // Update the Career model instance with the new data
@@ -94,7 +106,9 @@ class CareerController extends Controller
             $career->update(['cv' => $cvPath]);
         }
 
-        return response()->json(['message' => 'Career updated successfully', 'career' => $career], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Career updated successfully', 'career' => $career], 200);
     }
 
     public function deleteCareer($id)
@@ -104,7 +118,9 @@ class CareerController extends Controller
 
         if (!$career) {
             // Handle the case where the career is not found
-            return response()->json(['message' => 'Career not found'], 404);
+            return response()->json([
+                'success' => false,
+                'message' => 'Career not found'], 404);
         }
 
         // Delete the CV file
@@ -115,10 +131,14 @@ class CareerController extends Controller
         // Delete the Career model instance
         if (!$career->delete()) {
             // Handle the case where deletion fails
-            return response()->json(['message' => 'Failed to delete career'], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete career'], 500);
         }
 
-        return response()->json(['message' => 'Career deleted successfully'], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Career deleted successfully'], 200);
     }
 
     public function readAllCareers()
@@ -127,6 +147,8 @@ class CareerController extends Controller
         $careers = Career::all();
 
         // Return the response
-        return response()->json(['careers' => $careers], 200);
+        return response()->json([
+            'success' => true,
+            'careers' => $careers], 200);
     }
 }

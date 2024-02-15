@@ -15,6 +15,7 @@ class Career extends Model
         'contactnumber',
         'category',
         'experience',
+        'cv',
         'status',
         'appliedto',
     ];
