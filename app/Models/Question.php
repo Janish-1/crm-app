@@ -5,19 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Career extends Model
+class Question extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'mail',
-        'contactnumber',
+        'question',
+        'options',
+        'correct_answer',
         'category',
-        'experience',
-        'cv',
-        'status',
-        'appliedto',
-        'teststatus',
     ];
 }
