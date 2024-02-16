@@ -9,10 +9,18 @@ class Quiz extends Controller
 {
     public function openQuiz(Request $request)
     {
-        $category=$request->category;
+        $category = $request->category;
+        $testid = $request->testid; // Get testid from the URL
         $questions = Question::where('category', $category)->get();
-        return view('quiz', compact('questions', 'category'));
+
+        // Redirect to fail page if testid is not available
+        if (!$testid) {
+            return redirect()->route('fail', ['category' => $category]);
+        }
+
+        return view('quiz', compact('questions', 'category', 'testid'));
     }
+        
     public function submitQuiz(Request $request, $category)
     {
         $answers = $request->input('answers');

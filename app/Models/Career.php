@@ -19,5 +19,6 @@ class Career extends Model
         'status',
         'appliedto',
         'teststatus',
+        'testid',
     ];
 }

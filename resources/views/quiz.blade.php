@@ -3,7 +3,8 @@
 
 @section('content')
     <h1>Quiz</h1>
-    <p>Category: {{ $category }}</p>
+    <p>{{ $category }}</p>
+    <p>{{ $testid }}</p>
 
     <form action="/submit-quiz/{{$category}}" method="post">
         @csrf

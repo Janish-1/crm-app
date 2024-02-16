@@ -8,6 +8,21 @@ use Illuminate\Support\Facades\Storage;
 
 class CareerController extends Controller
 {
+    private function random_strings($length_of_string)
+    {
+
+        // String of all alphanumeric character
+        $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+        // Shuffle the $str_result and returns substring
+        // of specified length
+        return substr(
+            str_shuffle($str_result),
+            0,
+            $length_of_string
+        );
+    }
+
     public function createCareer(Request $request)
     {
         // Validate the incoming request
@@ -19,18 +34,21 @@ class CareerController extends Controller
             'experience' => 'required',
             'cv' => 'required|mimes:pdf,doc,docx',
         ]);
-    
+
         // Check if any data is provided
         $requestData = $request->only(['name', 'mail', 'contact', 'category', 'experience']);
         if (empty(array_filter($requestData))) {
             return response()->json([
                 'success' => false,
-                'message' => 'No data provided'], 400);
+                'message' => 'No data provided'
+            ], 400);
         }
-    
+
         // Upload the CV file
         $cvPath = $request->file('cv')->store('cv_files');
-    
+
+        $testid = $this->random_strings(200);
+
         // Create a new Career model instance
         $career = new Career([
             'name' => $requestData['name'],
@@ -39,21 +57,25 @@ class CareerController extends Controller
             'category' => $requestData['category'],
             'experience' => $requestData['experience'],
             'cv' => $cvPath,
+            'testid' => $testid,
         ]);
-    
+
         // Save the Career model instance to the database
         if (!$career->save()) {
             // Handle the case where saving fails
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to create career'], 500);
+                'message' => 'Failed to create career'
+            ], 500);
         }
-    
+
         return response()->json([
             'success' => true,
-            'message' => 'Career created successfully', 'career' => $career], 200);
+            'message' => 'Career created successfully',
+            'career' => $career
+        ], 200);
     }
-    
+
     public function readCareer($id)
     {
         $career = Career::find($id);
@@ -61,11 +83,13 @@ class CareerController extends Controller
         if ($career) {
             return response()->json([
                 'success' => true,
-                'career' => $career], 200);
+                'career' => $career
+            ], 200);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Career not found'], 404);
+                'message' => 'Career not found'
+            ], 404);
         }
     }
 
@@ -88,7 +112,8 @@ class CareerController extends Controller
             // Handle the case where the career is not found
             return response()->json([
                 'success' => false,
-                'message' => 'Career not found'], 404);
+                'message' => 'Career not found'
+            ], 404);
         }
 
         // Update the Career model instance with the new data
@@ -108,7 +133,9 @@ class CareerController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Career updated successfully', 'career' => $career], 200);
+            'message' => 'Career updated successfully',
+            'career' => $career
+        ], 200);
     }
 
     public function deleteCareer($id)
@@ -120,7 +147,8 @@ class CareerController extends Controller
             // Handle the case where the career is not found
             return response()->json([
                 'success' => false,
-                'message' => 'Career not found'], 404);
+                'message' => 'Career not found'
+            ], 404);
         }
 
         // Delete the CV file
@@ -133,12 +161,14 @@ class CareerController extends Controller
             // Handle the case where deletion fails
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete career'], 500);
+                'message' => 'Failed to delete career'
+            ], 500);
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Career deleted successfully'], 200);
+            'message' => 'Career deleted successfully'
+        ], 200);
     }
 
     public function readAllCareers()
@@ -149,6 +179,41 @@ class CareerController extends Controller
         // Return the response
         return response()->json([
             'success' => true,
-            'careers' => $careers], 200);
+            'careers' => $careers
+        ], 200);
+    }
+
+    public function redirectToTest(Request $request)
+    {
+        // Get the provided test ID from the request
+        $testid = $request->testid;
+
+        // Check if the test ID is provided
+        if (!$testid) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Test ID is required'
+            ], 400);
+        }
+
+        // Check if the test ID exists and the status is pending in the careers database
+        $career = Career::where('testid', $testid)->where('teststatus', 'pending')->first();
+        $category = $career->category;
+
+        if ($career) {
+            // Return a 200 response with a success message and the test ID
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully redirected to test page',
+                'testid' => $testid,
+                'redirectUrl' => "http://127.0.0.1:8000/quiz/category={$category}&testid={$testid}"
+            ], 200);
+        }
+
+        // Handle the case where the test ID is invalid or the status is not pending
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid test ID or test status is not pending'
+        ], 400);
     }
 }

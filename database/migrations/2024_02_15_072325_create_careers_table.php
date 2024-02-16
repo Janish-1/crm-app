@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('cv');
             $table->string('status');
             $table->string('appliedto');
+            $table->string('testid');
             $table->timestamps();
         });    }
 
