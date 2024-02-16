@@ -1,80 +1,110 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Quiz</h1>
-    <p>{{ $category }}</p>
-    <p>{{ $testid }}</p>
-    <p id="timer"></p>
+<h1>Quiz</h1>
+<p>{{ $category }}</p>
+<p>{{ $testid }}</p>
+<p id="timer"></p>
 
-    <form id="quiz-form" action="{{ route('submit-quiz', ['category' => $category, 'testid' => $testid]) }}" method="post">
-        @csrf
+<form id="quiz-form" action="{{ route('submit-quiz', ['category' => $category, 'testid' => $testid]) }}" method="post">
+    @csrf
 
-        @foreach ($questions as $question)
-            <div>
-                <p>{{ $question->question }}</p>
+    @foreach ($questions as $question)
+    <div>
+        <p>{{ $question->question }}</p>
 
-                @foreach (json_decode($question->options, true) ?? [] as $option)
-                    <label>
-                        <input type="radio" name="answers[{{ $question->id }}]" value="{{ $option }}">
-                        {{ $option }}
-                    </label><br>
-                @endforeach
-            </div>
+        @foreach (json_decode($question->options, true) ?? [] as $option)
+        <label>
+            <input type="radio" name="answers[{{ $question->id }}]" value="{{ $option }}">
+            {{ $option }}
+        </label><br>
         @endforeach
+    </div>
+    @endforeach
 
-        <button type="button" id="submit-button">Submit Quiz</button>
-    </form>
+    <button type="button" id="submit-button">Submit Quiz</button>
+</form>
 
-    <script>
-        var countdown = 600; // 10 minutes in seconds
+<script>
+    var isTestStarted = false;
 
-        var timer = setInterval(function () {
-            countdown--;
+    // Attach load event to the window
+    window.addEventListener('load', function () {
+        // Show a confirmation dialog before starting the test
+        var startTestConfirmation = window.confirm('Are you sure you want to start the test?');
 
-            if (countdown <= 0) {
-                clearInterval(timer);
-                submitQuiz('fail'); // Redirect to fail path when the timer reaches zero
-            }
+        if (startTestConfirmation) {
+            isTestStarted = true;
 
-            // Update the timer display
-            updateTimerDisplay();
-        }, 1000);
+            // You can continue with your existing logic to start the test
+            // For example, you can remove the warning listener if the test has started
+            window.removeEventListener('beforeunload', beforeUnloadWarning);
 
-        // Listen for page visibility change events
-        document.addEventListener('visibilitychange', function () {
-            if (document.hidden) {
-                submitQuiz('fail'); // Redirect to fail path when the page is hidden
-            }
-        });
+            // Start the timer or any other logic you have
+            startTimer();
 
-        // Attach click event to the submit button
-        document.getElementById('submit-button').addEventListener('click', function () {
-            submitQuiz('submit-quiz'); // Updated to use 'submit-quiz' as the default path
-        });
+        } else {
+            // If the user chose not to start the test, keep the warning on leaving the page
+            window.location.href = 'http://localhost:8001/careers/teststartpage.php'
+        }
+    });
+    
+    var countdown = 600; // 10 minutes in seconds
+    var timer = setInterval(function () {
+        countdown--;
 
-        function submitQuiz(path) {
+        if (countdown <= 0) {
             clearInterval(timer);
-
-            // Clear all selected options
-            var radioButtons = document.querySelectorAll('input[type="radio"]');
-            radioButtons.forEach(function (radioButton) {
-                radioButton.checked = false;
-            });
-
-            // Construct the path URL with category and testid parameters
-            var constructedPath = '/' + path + '/{{ $category }}/{{ $testid }}';
-
-            // Redirect to the constructed path
-            window.location.href = constructedPath;
+            submitQuiz('fail'); // Redirect to fail path when the timer reaches zero
         }
 
-        function updateTimerDisplay() {
-            var minutes = Math.floor(countdown / 60);
-            var seconds = countdown % 60;
+        // Update the timer display
+        updateTimerDisplay();
+    }, 1000);
 
-            // Format the time and update the display
-            document.getElementById('timer').textContent =
-                'Time Remaining: ' + minutes + ' minutes ' + seconds + ' seconds';
+    // Listen for page visibility change events
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+            submitQuiz('fail'); // Redirect to fail path when the page is hidden
         }
-    </script>
+    });
+
+    // Attach click event to the submit button
+    document.getElementById('submit-button').addEventListener('click', function () {
+        submitQuiz('submit-quiz'); // Updated to use 'submit-quiz' as the default path
+    });
+
+    // Warn the user before leaving or reloading the page
+    window.addEventListener('beforeunload', function (e) {
+        var confirmationMessage = 'Are you sure you want to leave? Your test progress will be lost.';
+
+        (e || window.event).returnValue = confirmationMessage; // Standard
+        return confirmationMessage; // For some older browsers
+    });
+
+    function submitQuiz(path) {
+        clearInterval(timer);
+
+        // Clear all selected options
+        var radioButtons = document.querySelectorAll('input[type="radio"]');
+        radioButtons.forEach(function (radioButton) {
+            radioButton.checked = false;
+        });
+
+        // Construct the path URL with category and testid parameters
+        var constructedPath = '/' + path + '/{{ $category }}/{{ $testid }}';
+
+        // Redirect to the constructed path
+        window.location.href = constructedPath;
+    }
+
+    function updateTimerDisplay() {
+        var minutes = Math.floor(countdown / 60);
+        var seconds = countdown % 60;
+
+        // Format the time and update the display
+        document.getElementById('timer').textContent =
+            'Time Remaining: ' + minutes + ' minutes ' + seconds + ' seconds';
+    }
+</script>
 @endsection

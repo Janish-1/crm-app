@@ -19,7 +19,10 @@ Route::get('/', function () {
 });
 
 Route::get('/quiz/{category}/{testid}', [Quiz::class, 'openQuiz'])->name('quiz');
-Route::post('/submit-quiz/{category}/{testid}', [Quiz::class, 'submitQuiz'])->name('submit-quiz');
-Route::get('/pass/{category}/{testid}', [Quiz::class, 'passPage'])->name('pass');
-Route::get('/fail/{category}/{testid}', [Quiz::class, 'failPage'])->name('fail');
+Route::get('/submit-quiz/{category}/{testid}', [Quiz::class, 'submitQuiz'])->name('submit-quiz');
+Route::get('/pass/{category}/{testid}', [Quiz::class, 'passfunction']);
+Route::get('/fail/{category}/{testid}', [Quiz::class, 'failfunction']);
 Route::get('/error',[Quiz::class,'errorPage'])->name('error');
+
+Route::get('/passpage',[Quiz::class,'passpage'])->name('passpage');
+Route::get('/failpage',[Quiz::class,'failpage'])->name('failpage');

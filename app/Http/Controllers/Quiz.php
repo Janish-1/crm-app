@@ -65,19 +65,19 @@ class Quiz extends Controller
             // Redirect based on the percentage
             if ($percentageCorrect >= 75) {
                 $test->teststatus = 'pass';
-                $test->save();    
-                return redirect()->route('pass', ['category' => $category]);
+                $test->save();
+                return redirect()->route('passpage', ['category' => $category]);
             } else {
                 $test->teststatus = 'fail';
-                $test->save();    
-                return redirect()->route('fail', ['category' => $category]);
+                $test->save();
+                return redirect()->route('failpage', ['category' => $category]);
             }
         } catch (\Exception $e) {
             return redirect()->route('error')->with('message', 'An error occurred during the quiz submission.');
         }
     }
 
-    public function passPage(Request $request)
+    public function passfunction(Request $request)
     {
         $category = $request->category;
         $testid = $request->testid;
@@ -87,15 +87,17 @@ class Quiz extends Controller
             ->where('testid', $testid)
             ->first();
 
-        if ($test) {
+        $teststatus = $test->teststatus;
+
+        if ($test && $teststatus == 'pending') {
             $test->teststatus = 'pass';
             $test->save();
         }
 
-        return view('pass');
+        return redirect()->route('passpage');
     }
 
-    public function failPage(Request $request)
+    public function failfunction(Request $request)
     {
         $category = $request->category;
         $testid = $request->testid;
@@ -105,12 +107,22 @@ class Quiz extends Controller
             ->where('testid', $testid)
             ->first();
 
-        if ($test) {
+        $teststatus = $test->teststatus;
+
+        if ($test && $teststatus == 'pending') {
             $test->teststatus = 'fail';
             $test->save();
         }
 
-        return view('fail');
+        return redirect()->route('failpage');
+    }
+
+    public function passpage(){
+        return view('passpage');
+    }
+
+    public function failpage(){
+        return view('failpage');
     }
 
     public function errorPage()
