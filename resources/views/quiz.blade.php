@@ -1,30 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Quiz</h1>
-<p>{{ $category }}</p>
-<p>{{ $testid }}</p>
-<p id="timer"></p>
+<div id="quiz-container" class="quiz-container">
+    <h1>Quiz</h1>
+    <p>Category: {{ $category }}</p>
+    <p>Test ID: {{ $testid }}</p>
+    <div id="timer" class="timer"></div>
 
-<form id="quiz-form" action="{{ route('submit-quiz', ['category' => $category, 'testid' => $testid]) }}" method="post">
-    @csrf
+    <form action="{{ route('submit-quiz', ['category' => $category, 'testid' => $testid]) }}" method="post">
+        @csrf
 
-    @foreach ($questions as $question)
-    <div>
-        <p>{{ $question->question }}</p>
+        @foreach ($questions as $index => $question)
+        <div class="question">
+            <h3>{{ $index + 1 }}. {{ $question->question }}</h3>
 
-        @foreach (json_decode($question->options, true) ?? [] as $option)
-        <label>
-            <input type="radio" name="answers[{{ $question->id }}]" value="{{ $option }}">
-            {{ $option }}
-        </label><br>
+            @foreach (json_decode($question->options, true) ?? [] as $option)
+            <label class="option">
+                <input type="radio" name="answers[{{ $question->id }}]" value="{{ $option }}">
+                {{ $option }}
+            </label>
+            @endforeach
+        </div>
         @endforeach
-    </div>
-    @endforeach
 
-    <button type="button" id="submit-button">Submit Quiz</button>
-</form>
+        <button type="button" id="submit-button">Submit Quiz</button>
+    </form>
+</div>
+@endsection
 
+@section('javascript')
 <script>
     var isTestStarted = false;
 
@@ -48,14 +52,14 @@
             window.location.href = 'http://localhost:8001/careers/teststartpage.php'
         }
     });
-    
+
     var countdown = 600; // 10 minutes in seconds
     var timer = setInterval(function () {
         countdown--;
 
         if (countdown <= 0) {
             clearInterval(timer);
-            submitQuiz('fail'); // Redirect to fail path when the timer reaches zero
+            // submitQuiz('fail'); // Redirect to fail path when the timer reaches zero
         }
 
         // Update the timer display

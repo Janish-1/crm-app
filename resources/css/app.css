@@ -1,0 +1,33 @@
+body {
+    background-color: lightblue;
+}
+
+.quiz-container {
+    text-align: center;
+    margin: auto;
+    width: 500px;
+    padding: 24px;
+    background-color: white;
+    margin-top: 100px;
+}
+
+.timer {
+    /* Add your timer styling here */
+}
+
+.question {
+    margin-bottom: 20px;
+}
+
+.option {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#submit-button {
+    margin-top: 20px;
+    background-color: red;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+}
