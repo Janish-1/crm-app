@@ -35,4 +35,4 @@ Route::delete('/careers/{id}', [CareerController::class, 'deleteCareer']);
 // Read all careers
 Route::get('/careers', [CareerController::class, 'readAllCareers']);
 
-Route::post('/redirecttest',[CareerController::class,'redirectToTest']);
+Route::get('/redirecttest',[CareerController::class,'redirectToTest']);

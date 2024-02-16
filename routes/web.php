@@ -18,7 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/quiz/{category}&{testid}', [Quiz::class, 'openQuiz'])->name('quiz');
-Route::post('/submit-quiz/{category}', [Quiz::class, 'submitQuiz'])->name('submit-quiz');
-Route::get('/pass/{category}', [Quiz::class, 'passPage'])->name('pass');
-Route::get('/fail/{category}', [Quiz::class, 'failPage'])->name('fail');
+Route::get('/quiz/{category}/{testid}', [Quiz::class, 'openQuiz'])->name('quiz');
+Route::post('/submit-quiz/{category}/{testid}', [Quiz::class, 'submitQuiz'])->name('submit-quiz');
+Route::get('/pass/{category}/{testid}', [Quiz::class, 'passPage'])->name('pass');
+Route::get('/fail/{category}/{testid}', [Quiz::class, 'failPage'])->name('fail');
+Route::get('/error',[Quiz::class,'errorPage'])->name('error');

@@ -206,7 +206,7 @@ class CareerController extends Controller
                 'success' => true,
                 'message' => 'Successfully redirected to test page',
                 'testid' => $testid,
-                'redirectUrl' => "http://127.0.0.1:8000/quiz/category={$category}&testid={$testid}"
+                'redirectUrl' => "http://127.0.0.1:8000/quiz/{$category}/{$testid}"
             ], 200);
         }
 
