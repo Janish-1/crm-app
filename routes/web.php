@@ -26,12 +26,16 @@ Route::post('/auth/register', [AuthController::class, 'register'])->name('regist
 Route::get('/registerpage',[AuthController::class,'registerpage'])->name('registerpage');
 
 //protected route
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/home', [AuthController::class, 'home'])->name('home');
-    Route::get('/users', [PostController::class, 'show'])->middleware('restrictRole:admin')->name('users');
-    Route::put('/users/{id}', [PostController::class, 'update'])->middleware('restrictRole:moderator');
-});
-    
+// Route::group(['middleware' => ['auth:sanctum']], function () {
+//     Route::get('/home', [AuthController::class, 'home'])->name('home');
+//     Route::get('/users', [PostController::class, 'show'])->middleware('restrictRole:admin')->name('users');
+//     Route::put('/users/{id}', [PostController::class, 'update'])->middleware('restrictRole:moderator');
+// });
+
+Route::get('/home', [AuthController::class, 'home'])->name('home');
+Route::get('/users', [PostController::class, 'show'])->middleware('restrictRole:admin')->name('users');
+Route::put('/users/{id}', [PostController::class, 'update'])->middleware('restrictRole:moderator');
+
 Route::get('/quiz/{category}/{testid}', [Quiz::class, 'openQuiz'])->name('quiz');
 Route::get('/submit-quiz/{category}/{testid}', [Quiz::class, 'submitQuiz'])->name('submit-quiz');
 Route::get('/pass/{category}/{testid}', [Quiz::class, 'passfunction']);
