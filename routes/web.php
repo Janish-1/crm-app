@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/users', [PostController::class, 'show'])->middleware('restrictRole:admin')->name('users');
     Route::put('/users/{id}', [PostController::class, 'update'])->middleware('restrictRole:moderator');
 });
-
+    
 Route::get('/quiz/{category}/{testid}', [Quiz::class, 'openQuiz'])->name('quiz');
 Route::get('/submit-quiz/{category}/{testid}', [Quiz::class, 'submitQuiz'])->name('submit-quiz');
 Route::get('/pass/{category}/{testid}', [Quiz::class, 'passfunction']);

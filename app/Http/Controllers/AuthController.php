@@ -24,7 +24,7 @@ class AuthController extends Controller
         // Mass assign the validated request data to a new instance of the User model
         $user = User::create($userData);
         $token = $user->createToken('my-token')->plainTextToken;
-
+        
         return redirect('/')->with([
             'token' => $token,
             'Type' => 'Bearer'
@@ -58,10 +58,11 @@ class AuthController extends Controller
 
     public function home(Request $request)
     {
-        return view('home');
+        return view('admin/home');
     }
 
-    public function registerpage(Request $request){
+    public function registerpage(Request $request)
+    {
         return view('register');
     }
 }
