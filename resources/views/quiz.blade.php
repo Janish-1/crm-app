@@ -49,7 +49,7 @@
 
         } else {
             // If the user chose not to start the test, keep the warning on leaving the page
-            window.location.href = 'http://localhost:8001/careers/teststartpage.php'
+            window.location.href = 'http://crm.ramo.co.in/careers/teststartpage.php'
         }
     });
 
