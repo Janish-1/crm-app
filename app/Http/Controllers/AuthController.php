@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Career;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -66,6 +67,16 @@ class AuthController extends Controller
     public function home(Request $request)
     {    
         return view('admin/home');
+    }
+
+    public function sidebar(Request $request){
+        return view('admin/sidebar');
+    }
+
+    public function careerapplication(Request $request){
+        $data = Career::all();
+
+        return view('admin/careerapplication',['careers'=>$data]);
     }
     
     public function registerpage(Request $request)

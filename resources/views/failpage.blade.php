@@ -1,5 +1,5 @@
 <!-- resources/views/fail.blade.php -->
-@extends('layouts.app')
+@extends('layouts.quizlayout')
 
 @section('content')
     <h1>Oops! You Didn't Pass</h1>

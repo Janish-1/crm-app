@@ -33,6 +33,8 @@ Route::get('/registerpage',[AuthController::class,'registerpage'])->name('regist
 // });
 
 Route::get('/home', [AuthController::class, 'home'])->name('home');
+Route::get('/sidebar',[AuthController::class, 'sidebar'])->name('sidebar');
+Route::get('/careerapplication',[AuthController::class,'careerapplication'])->name('careerapplication');
 Route::get('/users', [PostController::class, 'show'])->middleware('restrictRole:admin')->name('users');
 Route::put('/users/{id}', [PostController::class, 'update'])->middleware('restrictRole:moderator');
 

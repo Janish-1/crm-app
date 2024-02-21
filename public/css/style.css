@@ -258,3 +258,36 @@
     left: 0;
   }
 }
+
+/* Career Application CSS 
+===================================== */
+#careertable .center-table {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Added for vertical alignment */
+  height: 100vh;
+  margin-left: 30px;
+}
+
+#careertable .table-container {
+  max-height: 500px; /* Adjust the maximum height as needed */
+  overflow: auto;
+  margin-top: 20px;
+}
+
+#careertable table {
+  border-collapse: collapse;
+  width: 60%;
+  margin: auto;
+  margin-top: 20px; /* Adjust the spacing between lines and table */
+}
+
+#careertable table, th, td {
+  border: 1px solid black;
+  text-align: left;
+}
+
+#careertable th, td {
+  padding: 10px;
+}
