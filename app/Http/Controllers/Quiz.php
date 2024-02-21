@@ -50,20 +50,21 @@ class Quiz extends Controller
         $questions = collect();
 
         // Determine the number of questions to take for each category
-        $questionsPerCategory = 15 / count($categories);
+        $questionsPerCategory = 15 / count($categories[$category]);
 
-        foreach ($categories[$category] as $individualCategory) {
-            $allQuestions = Question::where('category', $individualCategory)->get();
-        
+        \Log::info("Questions per Category: $questionsPerCategory");
+        \Log::info("Categories : ".json_encode($categories[$category]));
+
+        foreach ($categories[$category] as $individualCategory) {        
             // Shuffle the collection randomly and take the required number of questions
-            $individualQuestions = $allQuestions->shuffle()->take($questionsPerCategory);
-        
+            $individualQuestions = Question::where('category', $individualCategory)->inRandomOrder()->limit($questionsPerCategory)->get();
+            
             $questions = $questions->merge($individualQuestions);
-        
+            
             // Debug information
             \Log::info("Category: $individualCategory, Questions: " . json_encode($individualQuestions->pluck('id')->toArray()));
         }
-        
+                
         // Check if questions are empty
         if ($questions->isEmpty()) {
             return redirect()->route('error')->with('message', "No Questions Available for {$category}");
