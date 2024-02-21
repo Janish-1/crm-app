@@ -45,7 +45,7 @@ class CareerController extends Controller
         }
 
         // Upload the CV file
-        $cvPath = $request->file('cv')->store('cv_files');
+        $cvPath = $request->file('cv')->store('public/cv_files');
 
         $testid = $this->random_strings(200);
 

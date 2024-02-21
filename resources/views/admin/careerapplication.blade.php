@@ -30,8 +30,8 @@
                     <td>{{ $career->category }}</td>
                     <td>{{ $career->experience }}</td>
                     <td>
-                        <a href="{{ asset(Storage::url('app/'.$career->cv)) }}" target="_blank">View CV</a>
-                        <a href="{{ Storage::disk('local')->get($career->cv) }}" download>Download</a>
+                        <a href="{{ asset(Storage::url($career->cv)) }}" target="_blank">View CV</a>
+                        <a href="{{ asset(Storage::url($career->cv)) }}" target="_blank" download>Download CV</a>
                     </td>
                     <td>{{ $career->status }}</td>
                     <td>{{ $career->appliedto }}</td>
