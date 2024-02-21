@@ -65,9 +65,22 @@ class AuthController extends Controller
 
     public function home(Request $request)
     {
-        return view('admin/home');
+        // Retrieve the token from the session or wherever it's stored
+        $token = $request->session()->get('token');
+    
+        // Decode the token to get the user information
+        $user = JWTAuth::setToken($token)->toUser();
+    
+        // Access the user's role
+        $role = $user->getClaim('role');
+    
+        // Print out the role
+        dd($role);
+    
+        // You can also pass the role to the view if needed
+        return view('admin/home', ['role' => $role]);
     }
-
+    
     public function registerpage(Request $request)
     {
         return view('register');
