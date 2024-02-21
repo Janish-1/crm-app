@@ -31,14 +31,14 @@ class Quiz extends Controller
             'GameDesigner' => ['Photoshop', 'Elastic', 'Figma'],
             'BackendGameDeveloper' => ['MEAN'],
             'SalesAssociate(Telecaller)' => ['Sales', 'Telecaller'],
-            'SalesTeamLead' => ['Sales Team Lead'],
-            'SalesManager' => ['Sales Manager'],
-            'IonicDeveloper' => ['Ionic', 'Angular', 'React'],
+            'SalesTeamLead' => ['Sales','SalesTeamLead'],
+            'SalesManager' => ['Sales','SalesManager'],
+            'IonicDeveloper' => ['IonicDeveloper', 'Angular', 'React'],
             'SeniorReactNativeDeveloper' => ['React Native', 'JavaScript'],
             'DigitalMarketingAssistant' => ['Digital Marketing'],
             'GraphicDesigner' => ['Graphic Design'],
             'DevOps' => ['DevOps'],
-            'QualityAssurance' => ['Manual Testing', 'QA'],
+            'QualityAssurance' => ['Manual Testing', 'Quality Assurance'],
         ];
 
         // Check if the provided category is valid

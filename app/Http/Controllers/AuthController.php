@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -23,12 +24,11 @@ class AuthController extends Controller
 
         // Mass assign the validated request data to a new instance of the User model
         $user = User::create($userData);
-        $token = $user->createToken('my-token')->plainTextToken;
-        
-        return redirect('/')->with([
-            'token' => $token,
-            'Type' => 'Bearer'
-        ]);
+
+        // Generate a token for the registered user
+        $token = JWTAuth::fromUser($user);
+
+        return redirect('/')->with(['token' => $token]);
     }
 
     public function login(Request $request)
@@ -46,13 +46,20 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = $user->createToken('my-token')->plainTextToken;
+        // Use the correct credentials array when attempting to generate a token
+        $credentials = [
+            'email' => $user->email,
+            'password' => $fields['password'],
+        ];
+
+        // Attempt to generate a token for the user
+        if (!$token = JWTAuth::attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
 
         // Redirect the user to the home view after a successful login
         return redirect()->route('home')->with([
             'token' => $token,
-            'Type' => 'Bearer',
-            'role' => $user->role // include user role in response
         ]);
     }
 
