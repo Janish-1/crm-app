@@ -24,9 +24,46 @@ class Quiz extends Controller
             return redirect()->route('error', ['message' => "Test Already Done"]);
         }
 
-        // Fetch questions for the given category
-        $questions = Question::where('category', $category)->inRandomOrder()->take(15)->get();
+        // Define categories and their corresponding test options
+        $categories = [
+            'SeniorFullStack5PlusYears' => ['PHP', 'Angular', 'MySQL', 'API'],
+            'SeniorUnityGameDeveloper' => ['Unity Developer'],
+            'GameDesigner' => ['Photoshop', 'Elastic', 'Figma'],
+            'BackendGameDeveloper' => ['MEAN'],
+            'SalesAssociate(Telecaller)' => ['Sales', 'Telecaller'],
+            'SalesTeamLead' => ['Sales Team Lead'],
+            'SalesManager' => ['Sales Manager'],
+            'IonicDeveloper' => ['Ionic', 'Angular', 'React'],
+            'SeniorReactNativeDeveloper' => ['React Native', 'JavaScript'],
+            'DigitalMarketingAssistant' => ['Digital Marketing'],
+            'GraphicDesigner' => ['Graphic Design'],
+            'DevOps' => ['DevOps'],
+            'QualityAssurance' => ['Manual Testing', 'QA'],
+        ];
 
+        // Check if the provided category is valid
+        if (!array_key_exists($category, $categories)) {
+            return redirect()->route('error')->with('message', "Invalid Category: {$category}");
+        }
+
+        // Fetch questions for the given category
+        $questions = collect();
+
+        // Determine the number of questions to take for each category
+        $questionsPerCategory = 15 / count($categories);
+
+        foreach ($categories[$category] as $individualCategory) {
+            $allQuestions = Question::where('category', $individualCategory)->get();
+        
+            // Shuffle the collection randomly and take the required number of questions
+            $individualQuestions = $allQuestions->shuffle()->take($questionsPerCategory);
+        
+            $questions = $questions->merge($individualQuestions);
+        
+            // Debug information
+            \Log::info("Category: $individualCategory, Questions: " . json_encode($individualQuestions->pluck('id')->toArray()));
+        }
+        
         // Check if questions are empty
         if ($questions->isEmpty()) {
             return redirect()->route('error')->with('message', "No Questions Available for {$category}");
@@ -117,11 +154,13 @@ class Quiz extends Controller
         return redirect()->route('failpage');
     }
 
-    public function passpage(){
+    public function passpage()
+    {
         return view('passpage');
     }
 
-    public function failpage(){
+    public function failpage()
+    {
         return view('failpage');
     }
 
