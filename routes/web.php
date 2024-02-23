@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\Quiz;
 use Illuminate\Support\Facades\Route;
 
@@ -15,28 +13,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return view('login');
-});
-
-//public route
-Route::post('/auth/login', [AuthController::class, 'login'])->name('login');
-Route::post('/auth/register', [AuthController::class, 'register'])->name('register');
-Route::get('/registerpage',[AuthController::class,'registerpage'])->name('registerpage');
-
-//protected route
-// Route::group(['middleware' => ['auth:sanctum']], function () {
-//     Route::get('/home', [AuthController::class, 'home'])->name('home');
-//     Route::get('/users', [PostController::class, 'show'])->middleware('restrictRole:admin')->name('users');
-//     Route::put('/users/{id}', [PostController::class, 'update'])->middleware('restrictRole:moderator');
-// });
-
-Route::get('/home', [AuthController::class, 'home'])->name('home');
-Route::get('/sidebar',[AuthController::class, 'sidebar'])->name('sidebar');
-Route::get('/careerapplication',[AuthController::class,'careerapplication'])->name('careerapplication');
-Route::get('/users', [PostController::class, 'show'])->middleware('restrictRole:admin')->name('users');
-Route::put('/users/{id}', [PostController::class, 'update'])->middleware('restrictRole:moderator');
 
 Route::get('/quiz/{category}/{testid}', [Quiz::class, 'openQuiz'])->name('quiz');
 Route::get('/submit-quiz/{category}/{testid}', [Quiz::class, 'submitQuiz'])->name('submit-quiz');
